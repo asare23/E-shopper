@@ -1,0 +1,71 @@
+import "./App.css";
+import Navbar from "./Components/Navbar/Navbar";
+
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import Shop from "./Pages/Shop";
+import ShopCategory from "./Pages/ShopCategory";
+import Product from "./Pages/Product";
+import Cart from "./Pages/Cart";
+import LoginSignup from "./Pages/LoginSignup";
+import Login from "./Pages/Login";
+import ResetPassword from "./Pages/ResetPassword";
+import Footer from "./Components/Footer/Footer";
+import { getStorageImageUrl } from "./Services/productImages";
+
+const men_banner = getStorageImageUrl("menbanner.png");
+const women_banner = getStorageImageUrl("womenbanner.png");
+const kids_banner = getStorageImageUrl("kidbanner.png");
+
+function AppContent() {
+  const location = useLocation();
+  const pathname = location.pathname.toLowerCase();
+  const isLoginPage =
+    pathname === "/login" ||
+    pathname === "/login-page" ||
+    pathname === "/login-signup" ||
+    pathname === "/reset-password";
+
+  return (
+    <div>
+      {!isLoginPage && <Navbar />}
+      <div className="app">
+        <Routes>
+          <Route path="/" element={<Shop />} />
+          <Route
+            path="/mens"
+            element={<ShopCategory banner={men_banner} category="men" />}
+          />
+          <Route
+            path="/womens"
+            element={<ShopCategory banner={women_banner} category="women" />}
+          />
+          <Route
+            path="/kids"
+            element={<ShopCategory banner={kids_banner} category="kids" />}
+          />
+          <Route path="/product" element={<Product />}>
+            <Route path=":productId" element={<Product />} />
+          </Route>
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/Cart" element={<Cart />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/Login" element={<Login />} />
+          <Route path="/login-page" element={<Login />} />
+          <Route path="/login-signup" element={<LoginSignup />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
+        </Routes>
+      </div>
+      {!isLoginPage && <Footer />}
+    </div>
+  );
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <AppContent />
+    </BrowserRouter>
+  );
+}
+
+export default App;

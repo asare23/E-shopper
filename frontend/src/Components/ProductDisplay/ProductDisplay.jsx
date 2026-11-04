@@ -1,0 +1,110 @@
+import React, { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import "./ProductDisplay.css";
+import { getStorageImageUrl } from "../../Services/productImages";
+import { ShopContext } from "../../Context/ShopContext";
+
+const sizes = ["S", "M", "L", "XL", "XXL"];
+const star_icon = getStorageImageUrl("star.png");
+const star_dull_icon = getStorageImageUrl("stardull.png");
+
+const ProductDisplay = (props) => {
+  const { product } = props;
+  const { addToCart } = useContext(ShopContext);
+  const navigate = useNavigate();
+  const [selectedSize, setSelectedSize] = useState("S");
+  const oldPrice = product.old_price ?? product.oldPrice ?? product.price_old;
+  const newPrice = product.new_price ?? product.newPrice ?? product.price;
+
+  const formatPrice = (price) =>
+    price === null || price === undefined || price === ""
+      ? "Price unavailable"
+      : `GH₵ ${Number(price).toLocaleString()}`;
+
+  return (
+    <div className="productdisplay">
+      <div className="productdisplay-left">
+        <div className="productdisplay-img-list">
+          <img src={product.image} alt="" />
+          <img src={product.image} alt="" />
+          <img src={product.image} alt="" />
+          <img src={product.image} alt="" />
+        </div>
+        <div className="productdisplay-img">
+          <img className="productdisplay-main-img" src={product.image} alt="" />
+        </div>
+      </div>
+      <div className="productdisplay-right">
+        <h1>{product.name}</h1>
+        <div className="productdisplay-right-stars">
+          <img src={star_icon} alt="" />
+          <img src={star_icon} alt="" />
+          <img src={star_icon} alt="" />
+          <img src={star_icon} alt="" />
+          <img src={star_dull_icon} alt="" />
+          <p>(122)</p>
+        </div>
+        <div className="productdisplay-right-prices">
+          <div className="productdisplay-price-old">
+            {formatPrice(oldPrice)}
+          </div>
+          <div className="productdisplay-price-new">
+            {formatPrice(newPrice)}
+          </div>
+        </div>
+        <div className="productdisplay-right-description">
+          Turn heads with this effortlessly chic Elegant Floral Midi Dress,
+          perfect for any occasion from brunch dates to evening strolls. Crafted
+          from a soft, breathable fabric blend, this dress features a flattering
+          A-line silhouette that cinches at the waist for a timeless feminine
+          shape.
+        </div>
+        <div className="productdisplay-right-size">
+          <h1>Select Size</h1>
+          <div className="productdisplay-right-size-options">
+            {sizes.map((size) => (
+              <div
+                key={size}
+                className={selectedSize === size ? "selected" : ""}
+                onClick={() => setSelectedSize(size)}
+                style={{
+                  cursor: "pointer",
+                  padding: "8px 12px",
+                  border:
+                    selectedSize === size
+                      ? "1px solid #ff4141"
+                      : "1px solid #c5c5c5",
+                  borderRadius: "4px",
+                  background: selectedSize === size ? "#fff0f0" : "#fff",
+                  fontWeight: selectedSize === size ? 600 : 500,
+                }}
+              >
+                {size}
+              </div>
+            ))}
+          </div>
+        </div>
+        <button
+          onClick={async () => {
+            try {
+              await addToCart(product.id, product, selectedSize);
+              navigate("/cart");
+            } catch {
+              // Keep the user on the product page when saving fails.
+            }
+          }}
+        >
+          ADD TO CART
+        </button>
+        <p className="productdisplay-righticategory">
+          <span>Category: </span>Women, T-Shirt, Crop Top
+        </p>
+        <p className="productdisplay-righticategory">
+          <span>Tags: </span>Modern, Latest
+        </p>
+      </div>
+    </div>
+  );
+};
+
+export default ProductDisplay;
