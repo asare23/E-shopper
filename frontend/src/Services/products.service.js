@@ -1,10 +1,9 @@
 import { resolveProductImages } from "./productImages";
-
-const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
+import { getApiUrl } from "./apiUrl";
 
 export const fetchAllProducts = async () => {
   try {
-    const res = await fetch(`${API_URL}/api/products`);
+    const res = await fetch(`${getApiUrl()}/api/products`);
     if (!res.ok) {
       throw new Error(`fetchAllProducts status ${res.status}`);
     }
@@ -21,7 +20,9 @@ export const fetchAllProducts = async () => {
 
 export const fetchProductsByCategory = async (category) => {
   try {
-    const res = await fetch(`${API_URL}/api/products/category/${category}`);
+    const res = await fetch(
+      `${getApiUrl()}/api/products/category/${category}`,
+    );
     if (!res.ok) {
       throw new Error(`fetchProductsByCategory status ${res.status}`);
     }

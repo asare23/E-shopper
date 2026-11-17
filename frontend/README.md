@@ -1,5 +1,16 @@
 # Getting Started with Create React App
 
+## Deployment
+
+The product pages call the Express backend, not Supabase directly. In the Vercel
+project that builds this frontend, add `REACT_APP_API_URL` as an environment
+variable with the public base URL of the deployed backend (for example,
+`https://your-backend.example.com`, without a trailing slash), then redeploy.
+The backend must be deployed and configured with its Supabase credentials.
+
+For local development, the frontend uses `http://localhost:5000` when
+`REACT_APP_API_URL` is not set.
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts

@@ -1,10 +1,9 @@
 import { resolveProductImages } from "./productImages";
-
-const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
+import { getApiUrl } from "./apiUrl";
 
 export const fetchPopularProducts = async () => {
   try {
-    const res = await fetch(`${API_URL}/api/popproducts`);
+    const res = await fetch(`${getApiUrl()}/api/popproducts`);
     if (!res.ok) {
       throw new Error(`fetchPopularProducts status ${res.status}`);
     }
